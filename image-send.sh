@@ -43,12 +43,14 @@ else
 fi
 
 function send_image_to_discord () {
-  FILENAME=$1
-  WEBHOOK_URL=$2
-  
+  FILENAME="$1"
+  WEBHOOK_URL="$2"
+  BASE_FILENAME=$(basename "$filename")
+
+
   WEBHOOK_DATA='{
     "embeds":[{
-	  "description": "'$(basename $filename)'"
+         "description": "'$BASE_FILENAME'"
 	}]
   }'
   
@@ -71,6 +73,6 @@ for filename in $FILE_PATH*.{jpg,JPG,png,PNG,JPEG,jpeg,gif,GIF}; do
   if [[ ! -e $filename ]];
     then continue;
   fi;
-  echo $filename
-  send_image_to_discord $filename $WEBHOOK_URL
+  echo -e "\\n[Webhook]: Preparing to send $filename"
+  send_image_to_discord "$filename" "$WEBHOOK_URL"
 done
