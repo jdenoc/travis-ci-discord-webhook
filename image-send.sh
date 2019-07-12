@@ -54,7 +54,7 @@ function send_image_to_discord () {
 	}]
   }'
   
-  echo -e "\\n[Webhook]: Sending image via webhook."
+  echo -e "\\n[Webhook]: Sending image via webhook..."
   (
     curl \
 	  --fail \
@@ -69,10 +69,16 @@ function send_image_to_discord () {
 }
 
 # cycle through all the image files in the given directory and send to discord via webhook_url
+IMAGE_AVAILABLE=false
 for filename in $FILE_PATH*.{jpg,JPG,png,PNG,JPEG,jpeg,gif,GIF}; do
   if [[ ! -e $filename ]];
     then continue;
   fi;
-  echo -e "\\n[Webhook]: Preparing to send $filename"
+  IMAGE_AVAILABLE=true
+  echo -e "\\n[Webhook]: Preparing to send '$filename'"
   send_image_to_discord "$filename" "$WEBHOOK_URL"
 done
+
+if ! $IMAGE_AVAILABLE ;
+  then echo -e "\\n[Webhook]: No images available to send to discord";
+fi;
